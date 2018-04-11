@@ -33,32 +33,32 @@
 
 typedef struct
 {
-    uint32_t fsel[6];                            // GPIO Function Select
-    uint32_t resvd_0x18;
-    uint32_t set[2];                             // GPIO Pin Output Set
-    uint32_t resvd_0x24;
-    uint32_t clr[2];                             // GPIO Pin Output Clear
-    uint32_t resvd_0x30;
-    uint32_t lev[2];                             // GPIO Pin Level
-    uint32_t resvd_0x3c;
-    uint32_t eds[2];                             // GPIO Pin Event Detect Status
-    uint32_t resvd_0x48;
-    uint32_t ren[2];                             // GPIO Pin Rising Edge Detect Enable
-    uint32_t resvd_0x54;
-    uint32_t fen[2];                             // GPIO Pin Falling Edge Detect Enable
-    uint32_t resvd_0x60;
-    uint32_t hen[2];                             // GPIO Pin High Detect Enable
-    uint32_t resvd_0x6c;
-    uint32_t len[2];                             // GPIO Pin Low Detect Enable
-    uint32_t resvd_0x78;
-    uint32_t aren[2];                            // GPIO Pin Async Rising Edge Detect
-    uint32_t resvd_0x84;
-    uint32_t afen[2];                            // GPIO Pin Async Falling Edge Detect
-    uint32_t resvd_0x90;
-    uint32_t pud;                                // GPIO Pin Pull up/down Enable
-    uint32_t pudclk[2];                          // GPIO Pin Pull up/down Enable Clock
-    uint32_t resvd_0xa0[4];
-    uint32_t test;
+    uint64_t fsel[6];                            // GPIO Function Select
+    uint64_t resvd_0x18;
+    uint64_t set[2];                             // GPIO Pin Output Set
+    uint64_t resvd_0x24;
+    uint64_t clr[2];                             // GPIO Pin Output Clear
+    uint64_t resvd_0x30;
+    uint64_t lev[2];                             // GPIO Pin Level
+    uint64_t resvd_0x3c;
+    uint64_t eds[2];                             // GPIO Pin Event Detect Status
+    uint64_t resvd_0x48;
+    uint64_t ren[2];                             // GPIO Pin Rising Edge Detect Enable
+    uint64_t resvd_0x54;
+    uint64_t fen[2];                             // GPIO Pin Falling Edge Detect Enable
+    uint64_t resvd_0x60;
+    uint64_t hen[2];                             // GPIO Pin High Detect Enable
+    uint64_t resvd_0x6c;
+    uint64_t len[2];                             // GPIO Pin Low Detect Enable
+    uint64_t resvd_0x78;
+    uint64_t aren[2];                            // GPIO Pin Async Rising Edge Detect
+    uint64_t resvd_0x84;
+    uint64_t afen[2];                            // GPIO Pin Async Falling Edge Detect
+    uint64_t resvd_0x90;
+    uint64_t pud;                                // GPIO Pin Pull up/down Enable
+    uint64_t pudclk[2];                          // GPIO Pin Pull up/down Enable Clock
+    uint64_t resvd_0xa0[4];
+    uint64_t test;
 } __attribute__((packed, aligned(4))) gpio_t;
 
 

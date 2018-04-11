@@ -32,7 +32,7 @@
 
 
 typedef struct {
-    uint32_t ctl;
+    uint64_t ctl;
 #define CM_CLK_CTL_PASSWD                        (0x5a << 24)
 #define CM_CLK_CTL_MASH(val)                     ((val & 0x3) << 9)
 #define CM_CLK_CTL_FLIP                          (1 << 8)
@@ -47,7 +47,7 @@ typedef struct {
 #define CM_CLK_CTL_SRC_PLLC                      (5 << 0)
 #define CM_CLK_CTL_SRC_PLLD                      (6 << 0)
 #define CM_CLK_CTL_SRC_HDMIAUX                   (7 << 0)
-    uint32_t div;
+    uint64_t div;
 #define CM_CLK_DIV_PASSWD                        (0x5a << 24)
 #define CM_CLK_DIV_DIVI(val)                     ((val & 0xfff) << 12)
 #define CM_CLK_DIV_DIVF(val)                     ((val & 0xfff) << 0)

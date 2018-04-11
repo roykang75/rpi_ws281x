@@ -337,7 +337,7 @@ const rpi_hw_t *rpi_hw_detect(void)
     {
         if (strstr(line, HW_VER_STRING))
         {
-            uint32_t rev;
+            uint64_t rev;
             char *substr;
             unsigned i;
 
@@ -356,7 +356,7 @@ const rpi_hw_t *rpi_hw_detect(void)
 
             for (i = 0; i < (sizeof(rpi_hw_info) / sizeof(rpi_hw_info[0])); i++)
             {
-                uint32_t hwver = rpi_hw_info[i].hwver;
+                uint64_t hwver = rpi_hw_info[i].hwver;
 
                 // Take out warranty and manufacturer bits
                 hwver &= ~(RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK);

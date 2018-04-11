@@ -39,13 +39,13 @@
  */
 typedef struct
 {
-    uint32_t ti;
-    uint32_t source_ad;
-    uint32_t dest_ad;
-    uint32_t txfr_len;
-    uint32_t stride;
-    uint32_t nextconbk;
-    uint32_t resvd_0x18[2];
+    uint64_t ti;
+    uint64_t source_ad;
+    uint64_t dest_ad;
+    uint64_t txfr_len;
+    uint64_t stride;
+    uint64_t nextconbk;
+    uint64_t resvd_0x18[2];
 } __attribute__((packed, aligned(4))) dma_cb_t;
 
 /*
@@ -53,7 +53,7 @@ typedef struct
  */
 typedef struct
 {
-    uint32_t cs;
+    uint64_t cs;
 #define RPI_DMA_CS_RESET                         (1 << 31)
 #define RPI_DMA_CS_ABORT                         (1 << 30)
 #define RPI_DMA_CS_DISDEBUG                      (1 << 29)
@@ -68,8 +68,8 @@ typedef struct
 #define RPI_DMA_CS_INT                           (1 << 2)
 #define RPI_DMA_CS_END                           (1 << 1)
 #define RPI_DMA_CS_ACTIVE                        (1 << 0)
-    uint32_t conblk_ad;
-    uint32_t ti;
+    uint64_t conblk_ad;
+    uint64_t ti;
 #define RPI_DMA_TI_NO_WIDE_BURSTS                (1 << 26)
 #define RPI_DMA_TI_WAITS(val)                    ((val & 0x1f) << 21)
 #define RPI_DMA_TI_PERMAP(val)                   ((val & 0x1f) << 16)
@@ -85,16 +85,16 @@ typedef struct
 #define RPI_DMA_TI_WAIT_RESP                     (1 << 3)
 #define RPI_DMA_TI_TDMODE                        (1 << 1)
 #define RPI_DMA_TI_INTEN                         (1 << 0)
-    uint32_t source_ad;
-    uint32_t dest_ad;
-    uint32_t txfr_len;
+    uint64_t source_ad;
+    uint64_t dest_ad;
+    uint64_t txfr_len;
 #define RPI_DMA_TXFR_LEN_YLENGTH(val)            ((val & 0xffff) << 16)
 #define RPI_DMA_TXFR_LEN_XLENGTH(val)            ((val & 0xffff) << 0)
-    uint32_t stride;
+    uint64_t stride;
 #define RPI_DMA_STRIDE_D_STRIDE(val)             ((val & 0xffff) << 16)
 #define RPI_DMA_STRIDE_S_STRIDE(val)             ((val & 0xffff) << 0)
-    uint32_t nextconbk;
-    uint32_t debug;
+    uint64_t nextconbk;
+    uint64_t debug;
 } __attribute__((packed, aligned(4))) dma_t;
 
 
@@ -121,6 +121,6 @@ typedef struct
 #define PAGE_OFFSET(page)                        (page & (PAGE_SIZE - 1))
 
 
-uint32_t dmanum_to_offset(int dmanum);
+uint64_t dmanum_to_offset(int dmanum);
 
 #endif /* __DMA_H__ */

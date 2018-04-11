@@ -107,7 +107,7 @@ typedef struct ws2811_device
     volatile pcm_t *pcm;
     int spi_fd;
     volatile dma_cb_t *dma_cb;
-    uint32_t dma_cb_addr;
+    uint64_t dma_cb_addr;
     volatile gpio_t *gpio;
     volatile cm_clk_t *cm_clk;
     videocore_mbox_t mbox;
@@ -164,9 +164,9 @@ static int map_registers(ws2811_t *ws2811)
 {
     ws2811_device_t *device = ws2811->device;
     const rpi_hw_t *rpi_hw = ws2811->rpi_hw;
-    uint32_t base = ws2811->rpi_hw->periph_base;
-    uint32_t dma_addr;
-    uint32_t offset = 0;
+    uint64_t base = ws2811->rpi_hw->periph_base;
+    uint64_t dma_addr;
+    uint64_t offset = 0;
 
     dma_addr = dmanum_to_offset(ws2811->dmanum);
     if (!dma_addr)
@@ -272,11 +272,11 @@ static void unmap_registers(ws2811_t *ws2811)
  *
  * @returns  Bus address for use by DMA.
  */
-static uint32_t addr_to_bus(ws2811_device_t *device, const volatile void *virt)
+static uint64_t addr_to_bus(ws2811_device_t *device, const volatile void *virt)
 {
     videocore_mbox_t *mbox = &device->mbox;
 
-    uint32_t offset = (uint8_t *)virt - mbox->virt_addr;
+    uint64_t offset = (uint8_t *)virt - mbox->virt_addr;
 
     return mbox->bus_addr + offset;
 }
@@ -344,7 +344,7 @@ static int setup_pwm(ws2811_t *ws2811)
     volatile pwm_t *pwm = device->pwm;
     volatile cm_clk_t *cm_clk = device->cm_clk;
     int maxcount = device->max_count;
-    uint32_t freq = ws2811->freq;
+    uint64_t freq = ws2811->freq;
     int32_t byte_count;
 
     stop_pwm(ws2811);
@@ -392,7 +392,7 @@ static int setup_pwm(ws2811_t *ws2811)
 
     dma_cb->source_ad = addr_to_bus(device, device->pxl_raw);
 
-    dma_cb->dest_ad = (uint32_t)&((pwm_t *)PWM_PERIPH_PHYS)->fif1;
+    dma_cb->dest_ad = (uint64_t)&((pwm_t *)PWM_PERIPH_PHYS)->fif1;
     dma_cb->txfr_len = byte_count;
     dma_cb->stride = 0;
     dma_cb->nextconbk = 0;
@@ -419,7 +419,7 @@ static int setup_pcm(ws2811_t *ws2811)
     volatile cm_clk_t *cm_clk = device->cm_clk;
     //int maxcount = max_channel_led_count(ws2811);
     int maxcount = device->max_count;
-    uint32_t freq = ws2811->freq;
+    uint64_t freq = ws2811->freq;
     int32_t byte_count;
 
     stop_pcm(ws2811);
@@ -457,7 +457,7 @@ static int setup_pcm(ws2811_t *ws2811)
                  RPI_DMA_TI_SRC_INC;          // Increment src addr
 
     dma_cb->source_ad = addr_to_bus(device, device->pxl_raw);
-    dma_cb->dest_ad = (uint32_t)&((pcm_t *)PCM_PERIPH_PHYS)->fifo;
+    dma_cb->dest_ad = (uint64_t)&((pcm_t *)PCM_PERIPH_PHYS)->fifo;
     dma_cb->txfr_len = byte_count;
     dma_cb->stride = 0;
     dma_cb->nextconbk = 0;
@@ -481,7 +481,7 @@ static void dma_start(ws2811_t *ws2811)
     ws2811_device_t *device = ws2811->device;
     volatile dma_t *dma = device->dma;
     volatile pcm_t *pcm = device->pcm;
-    uint32_t dma_cb_addr = device->dma_cb_addr;
+    uint64_t dma_cb_addr = device->dma_cb_addr;
 
     dma->cs = RPI_DMA_CS_RESET;
     usleep(10);
@@ -556,9 +556,9 @@ static int gpio_init(ws2811_t *ws2811)
  */
 void pwm_raw_init(ws2811_t *ws2811)
 {
-    volatile uint32_t *pxl_raw = (uint32_t *)ws2811->device->pxl_raw;
+    volatile uint64_t *pxl_raw = (uint64_t *)ws2811->device->pxl_raw;
     int maxcount = ws2811->device->max_count;
-    int wordcount = (PWM_BYTE_COUNT(maxcount, ws2811->freq) / sizeof(uint32_t)) /
+    int wordcount = (PWM_BYTE_COUNT(maxcount, ws2811->freq) / sizeof(uint64_t)) /
                     RPI_PWM_CHANNELS;
     int chan;
 
@@ -584,9 +584,9 @@ void pwm_raw_init(ws2811_t *ws2811)
  */
 void pcm_raw_init(ws2811_t *ws2811)
 {
-    volatile uint32_t *pxl_raw = (uint32_t *)ws2811->device->pxl_raw;
+    volatile uint64_t *pxl_raw = (uint64_t *)ws2811->device->pxl_raw;
     int maxcount = ws2811->device->max_count;
-    int wordcount = PCM_BYTE_COUNT(maxcount, ws2811->freq) / sizeof(uint32_t);
+    int wordcount = PCM_BYTE_COUNT(maxcount, ws2811->freq) / sizeof(uint64_t);
     int i;
 
     for (i = 0; i < wordcount; i++)
@@ -737,9 +737,9 @@ static ws2811_return_t spi_init(ws2811_t *ws2811)
     int spi_fd;
     static uint8_t mode;
     static uint8_t bits = 8;
-    uint32_t speed = ws2811->freq * 3;
+    uint64_t speed = ws2811->freq * 3;
     ws2811_device_t *device = ws2811->device;
-    uint32_t base = ws2811->rpi_hw->periph_base;
+    uint64_t base = ws2811->rpi_hw->periph_base;
     int pinnum = ws2811->channel[0].gpionum;
 
     spi_fd = open("/dev/spidev0.0", O_RDWR);
@@ -934,7 +934,7 @@ ws2811_return_t ws2811_init(ws2811_t *ws2811)
     }
 
     device->mbox.bus_addr = mem_lock(device->mbox.handle, device->mbox.mem_ref);
-    if (device->mbox.bus_addr == (uint32_t) ~0UL)
+    if (device->mbox.bus_addr == (uint64_t) ~0UL)
     {
        mem_free(device->mbox.handle, device->mbox.size);
        return WS2811_ERROR_MEM_LOCK;
@@ -1125,7 +1125,7 @@ ws2811_return_t  ws2811_render(ws2811_t *ws2811)
     int i, k, l, chan;
     unsigned j;
     ws2811_return_t ret = WS2811_SUCCESS;
-    uint32_t protocol_time = 0;
+    uint64_t protocol_time = 0;
     static uint64_t previous_timestamp = 0;
 
     bitpos = (driver_mode == SPI ? 7 : 31);
@@ -1146,7 +1146,7 @@ ws2811_return_t  ws2811_render(ws2811_t *ws2811)
         }
 
         // 1.25µs per bit
-        const uint32_t channel_protocol_time = channel->count * array_size * 8 * 1.25;
+        const uint64_t channel_protocol_time = channel->count * array_size * 8 * 1.25;
 
         // Only using the channel which takes the longest as both run in parallel
         if (channel_protocol_time > protocol_time)
@@ -1180,7 +1180,7 @@ ws2811_return_t  ws2811_render(ws2811_t *ws2811)
 
                     for (l = 2; l >= 0; l--)               // Symbol
                     {
-                        uint32_t *wordptr = &((uint32_t *)pxl_raw)[wordpos];   // PWM & PCM
+                        uint64_t *wordptr = &((uint64_t *)pxl_raw)[wordpos];   // PWM & PCM
                         volatile uint8_t  *byteptr = &pxl_raw[bytepos];    // SPI
 
                         if (driver_mode == SPI)

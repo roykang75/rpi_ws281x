@@ -52,7 +52,7 @@
 
 typedef struct
 {
-    uint32_t cs;
+    uint64_t cs;
 #define RPI_PCM_CS_STBY                         (1 << 25)
 #define RPI_PCM_CS_SYNC                         (1 << 24)
 #define RPI_PCM_CS_RXSEX                        (1 << 23)
@@ -74,8 +74,8 @@ typedef struct
 #define RPI_PCM_CS_TXON                         (1 << 2)
 #define RPI_PCM_CS_RXON                         (1 << 1)
 #define RPI_PCM_CS_EN                           (1 << 0)
-    uint32_t fifo;
-    uint32_t mode;;
+    uint64_t fifo;
+    uint64_t mode;;
 #define RPI_PCM_MODE_CLK_DIS                    (1 << 28)
 #define RPI_PCM_MODE_PDMN                       (1 << 27)
 #define RPI_PCM_MODE_PDME                       (1 << 26)
@@ -87,7 +87,7 @@ typedef struct
 #define RPI_PCM_MODE_FSI                        (1 << 20)
 #define RPI_PCM_MODE_FLEN(val)                  ((val & 0x3ff) << 10)
 #define RPI_PCM_MODE_FSLEN(val)                 ((val & 0x3ff) << 0)
-    uint32_t rxc;
+    uint64_t rxc;
 #define RPI_PCM_RXC_CH1WEX                      (1 << 31)
 #define RPI_PCM_RXC_CH1EN                       (1 << 30)
 #define RPI_PCM_RXC_CH1POS(val)                 ((val & 0x3ff) << 20)
@@ -96,7 +96,7 @@ typedef struct
 #define RPI_PCM_RXC_CH2EN                       (1 << 14)
 #define RPI_PCM_RXC_CH2POS(val)                 ((val & 0x3ff) << 4)
 #define RPI_PCM_RXC_CH2WID(val)                 ((val & 0x0f) << 0)
-    uint32_t txc;
+    uint64_t txc;
 #define RPI_PCM_TXC_CH1WEX                      (1 << 31)
 #define RPI_PCM_TXC_CH1EN                       (1 << 30)
 #define RPI_PCM_TXC_CH1POS(val)                 ((val & 0x3ff) << 20)
@@ -105,22 +105,22 @@ typedef struct
 #define RPI_PCM_TXC_CH2EN                       (1 << 14)
 #define RPI_PCM_TXC_CH2POS(val)                 ((val & 0x3ff) << 4)
 #define RPI_PCM_TXC_CH2WID(val)                 ((val & 0x0f) << 0)
-    uint32_t dreq;
+    uint64_t dreq;
 #define RPI_PCM_DREQ_TX_PANIC(val)              ((val & 0x7f) << 24)
 #define RPI_PCM_DREQ_RX_PANIC(val)              ((val & 0x7f) << 16)
 #define RPI_PCM_DREQ_TX(val)                    ((val & 0x7f) << 8)
 #define RPI_PCM_DREQ_RX(val)                    ((val & 0x7f) << 0)
-    uint32_t inten;
+    uint64_t inten;
 #define RPI_PCM_INTEN_RXERR                     (1 << 3)
 #define RPI_PCM_INTEN_TXERR                     (1 << 2)
 #define RPI_PCM_INTEN_RXR                       (1 << 1)
 #define RPI_PCM_INTEN_TXW                       (1 << 0)
-    uint32_t intstc;
+    uint64_t intstc;
 #define RPI_PCM_INTSTC_RXERR                    (1 << 3)
 #define RPI_PCM_INTSTC_TXERR                    (1 << 2)
 #define RPI_PCM_INTSTC_RXR                      (1 << 1)
 #define RPI_PCM_INTSTC_TXW                      (1 << 0)
-    uint32_t gray;
+    uint64_t gray;
 #define RPI_PCM_GRAY_RXFIFOLEVEL(val)           ((val & 0x3f) << 16)
 #define RPI_PCM_GRAY_FLUSHED(val)               ((val & 0x3f) << 10
 #define RPI_PCM_GRAY_RXLEVEL(val)               ((val & 0x3f) << 4)

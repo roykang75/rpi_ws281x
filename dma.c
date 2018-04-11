@@ -42,7 +42,7 @@
 
 
 // DMA address mapping by DMA number index
-static const uint32_t dma_offset[] =
+static const uint64_t dma_offset[] =
 {
     DMA0_OFFSET,
     DMA1_OFFSET,
@@ -63,7 +63,7 @@ static const uint32_t dma_offset[] =
 };
 
 
-uint32_t dmanum_to_offset(int dmanum)
+uint64_t dmanum_to_offset(int dmanum)
 {
     int array_size = sizeof(dma_offset) / sizeof(dma_offset[0]);
 

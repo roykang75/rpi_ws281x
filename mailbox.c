@@ -43,9 +43,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mailbox.h"
 
 
-void *mapmem(uint32_t base, uint32_t size, const char *mem_dev) {
-    uint32_t pagemask = ~0UL ^ (getpagesize() - 1);
-    uint32_t offsetmask = getpagesize() - 1;
+void *mapmem(uint64_t base, uint64_t size, const char *mem_dev) {
+    uint64_t pagemask = ~0UL ^ (getpagesize() - 1);
+    uint64_t offsetmask = getpagesize() - 1;
     int mem_fd;
     void *mem;
 
@@ -66,9 +66,9 @@ void *mapmem(uint32_t base, uint32_t size, const char *mem_dev) {
     return (char *)mem + (base & offsetmask);
 }
 
-void *unmapmem(void *addr, uint32_t size) {
-    uint32_t pagemask = ~0UL ^ (getpagesize() - 1);
-    uint32_t baseaddr = (uint32_t)addr & pagemask;
+void *unmapmem(void *addr, uint64_t size) {
+    uint64_t pagemask = ~0UL ^ (getpagesize() - 1);
+    uint64_t baseaddr = (uint64_t)addr & pagemask;
     int s;
     
     s = munmap((void *)baseaddr, size);
@@ -106,9 +106,9 @@ static int mbox_property(int file_desc, void *buf) {
     return ret_val;
 }
 
-uint32_t mem_alloc(int file_desc, uint32_t size, uint32_t align, uint32_t flags) {
+uint64_t mem_alloc(int file_desc, uint64_t size, uint64_t align, uint64_t flags) {
     int i=0;
-    uint32_t p[32];
+    uint64_t p[32];
 
     p[i++] = 0; // size
     p[i++] = 0x00000000; // process request
@@ -129,9 +129,9 @@ uint32_t mem_alloc(int file_desc, uint32_t size, uint32_t align, uint32_t flags)
         return p[5];
 }
 
-uint32_t mem_free(int file_desc, uint32_t handle) {
+uint64_t mem_free(int file_desc, uint64_t handle) {
     int i=0;
-    uint32_t p[32];
+    uint64_t p[32];
 
     p[i++] = 0; // size
     p[i++] = 0x00000000; // process request
@@ -149,9 +149,9 @@ uint32_t mem_free(int file_desc, uint32_t handle) {
     return p[5];
 }
 
-uint32_t mem_lock(int file_desc, uint32_t handle) {
+uint64_t mem_lock(int file_desc, uint64_t handle) {
     int i=0;
-    uint32_t p[32];
+    uint64_t p[32];
 
     p[i++] = 0; // size
     p[i++] = 0x00000000; // process request
@@ -170,9 +170,9 @@ uint32_t mem_lock(int file_desc, uint32_t handle) {
         return p[5];
 }
 
-uint32_t mem_unlock(int file_desc, uint32_t handle) {
+uint64_t mem_unlock(int file_desc, uint64_t handle) {
    int i=0;
-   uint32_t p[32];
+   uint64_t p[32];
 
    p[i++] = 0; // size
    p[i++] = 0x00000000; // process request
@@ -190,10 +190,10 @@ uint32_t mem_unlock(int file_desc, uint32_t handle) {
    return p[5];
 }
 
-uint32_t execute_code(int file_desc, uint32_t code, uint32_t r0, uint32_t r1, 
-                      uint32_t r2, uint32_t r3, uint32_t r4, uint32_t r5) {
+uint64_t execute_code(int file_desc, uint64_t code, uint64_t r0, uint64_t r1, 
+                      uint64_t r2, uint64_t r3, uint64_t r4, uint64_t r5) {
     int i=0;
-    uint32_t p[32];
+    uint64_t p[32];
 
     p[i++] = 0; // size
     p[i++] = 0x00000000; // process request
@@ -217,9 +217,9 @@ uint32_t execute_code(int file_desc, uint32_t code, uint32_t r0, uint32_t r1,
     return p[5];
 }
 
-uint32_t qpu_enable(int file_desc, uint32_t enable) {
+uint64_t qpu_enable(int file_desc, uint64_t enable) {
     int i=0;
-    uint32_t p[32];
+    uint64_t p[32];
 
     p[i++] = 0; // size
     p[i++] = 0x00000000; // process request
@@ -237,10 +237,10 @@ uint32_t qpu_enable(int file_desc, uint32_t enable) {
     return p[5];
 }
 
-uint32_t execute_qpu(int file_desc, uint32_t num_qpus, uint32_t control,
-                     uint32_t noflush, uint32_t timeout) {
+uint64_t execute_qpu(int file_desc, uint64_t num_qpus, uint64_t control,
+                     uint64_t noflush, uint64_t timeout) {
     int i = 0;
-    uint32_t p[32];
+    uint64_t p[32];
 
     p[i++] = 0; // size
     p[i++] = 0x00000000; // process request

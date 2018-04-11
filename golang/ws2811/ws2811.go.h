@@ -48,7 +48,7 @@ ws2811_t ledstring = {
    },
 };
 
-void ws2811_set_led(ws2811_t *ws2811, int index, uint32_t value) {
+void ws2811_set_led(ws2811_t *ws2811, int index, uint64_t value) {
 	ws2811->channel[0].leds[index] = value;
 }
 
